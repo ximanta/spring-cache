@@ -37,8 +37,6 @@ public class BlogServiceCacheTest {
 
     @BeforeEach
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
-//        reset(blogRepository);
         blogList = new ArrayList<>();
         blog1 = new Blog(1, "Blog 1", "John", "Sample Blog 1 for Testing");
         blog2 = new Blog(2, "Blog 2", "Meghna", "Sample Blog 2 for Testing");
@@ -66,7 +64,9 @@ public class BlogServiceCacheTest {
         blogService.saveBlog(blog2);
         blogService.getAllBlogs();
         blogService.getAllBlogs();
-        verify(blogRepository, times(1)).findAll();
+        blogService.getAllBlogs();
+        blogService.getAllBlogs();
+        verify(blogRepository, times(2)).findAll();
     }
 
     @Test
@@ -80,30 +80,30 @@ public class BlogServiceCacheTest {
 
     }
 
-//    @Test
-//    void givenBlogToSaveShouldEvictCache() {
-//        when(blogRepository.save(any())).thenReturn(blog1);
-//        when(blogRepository.findById(anyInt())).thenReturn(Optional.of(blog1));
-//        blogService.saveBlog(blog1);
-//        blogService.saveBlog(blog2);
-//        blogService.getBlogById(blog1.getBlogId());
-//        blogService.getBlogById(blog1.getBlogId());
-//        verify(blogRepository, times(1)).findById(blog1.getBlogId());
-//        blogService.saveBlog(blog3);
-//        verify(blogRepository, times(1)).findById(blog1.getBlogId());
-//    }
-//
-//    @Test
-//    void givenBlogToDeleteShouldEvictCache() {
-//        blogService.saveBlog(blog1);
-//        blogService.saveBlog(blog2);
-//        blogService.getAllBlogs();
-//        blogService.getAllBlogs();
-//        verify(blogRepository, times(1)).findAll();
-//        blogService.deleteBlogById(1);
-//        blogService.getAllBlogs();
-//        verify(blogRepository, times(1)).findAll();
-//    }
+    @Test
+    void givenBlogToSaveShouldEvictCache() {
+        when(blogRepository.save(any())).thenReturn(blog1);
+        when(blogRepository.findById(anyInt())).thenReturn(Optional.of(blog1));
+        blogService.saveBlog(blog1);
+        blogService.saveBlog(blog2);
+        blogService.getBlogById(blog1.getBlogId());
+        blogService.getBlogById(blog1.getBlogId());
+        verify(blogRepository, times(1)).findById(blog1.getBlogId());
+        blogService.saveBlog(blog3);
+        verify(blogRepository, times(1)).findById(blog1.getBlogId());
+    }
+
+    @Test
+    void givenBlogToDeleteShouldEvictCache() {
+        blogService.saveBlog(blog1);
+        blogService.saveBlog(blog2);
+        blogService.deleteBlogById(1);
+        blogService.getAllBlogs();
+        blogService.getAllBlogs();
+        blogService.getAllBlogs();
+        blogService.getAllBlogs();
+        verify(blogRepository, times(2)).findAll();
+    }
 
 
 }
