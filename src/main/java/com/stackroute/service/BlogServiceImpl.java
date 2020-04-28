@@ -29,7 +29,7 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Caching(evict = {
-            @CacheEvict(value="allblogcache"),
+            @CacheEvict(value="allblogcache", allEntries = true),
             @CacheEvict(value="blogcache", key = "#blog.blogId")
     })
     @Override
@@ -54,7 +54,7 @@ public class BlogServiceImpl implements BlogService {
         return retrievedBlog;
     }
     @Caching(evict = {
-            @CacheEvict(value="allblogcache"),
+            @CacheEvict(value="allblogcache", allEntries = true),
             @CacheEvict(value="blogcache", key = "#blogId")
     })
     @Override
